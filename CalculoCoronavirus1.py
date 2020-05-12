@@ -9,6 +9,8 @@ reader = csv.reader(archivo,delimiter=';')
 i=0
 acumulador=0
 contador=0
+#creamos una variable min para guardar lo que actualmente esta en aux
+minimo=4
 for linea in reader:
     #usamos esta condicion para poder obtener a partir de la segunda fila del csv y asi evitar el conflicto por tipos de datos
     if i==0:
@@ -22,11 +24,12 @@ for linea in reader:
     if(linea[2]=='0'):
         break
     aux=(linea[2])
-    aux=float(aux)
-    acumulador=acumulador+aux
+    aux=float(aux) 
+    #indicamos el para hallar con el numero mas pequenho despues de 1.0
     contador+=1
-
-promedio=acumulador/contador
+    if(aux<=minimo and aux>1.0):
+        acumulador=aux
+        minimo=aux
 print("A continuacion se presenta un pequenho programa que su funcion principal es tratar de predecir por medio de calculos estadisticos")
 print("la cantidad de casos de coronavirus en los siguientes dias en nuestro Paraguay")
 print("----------------------------------------------------------------------------------")
@@ -38,8 +41,11 @@ print("-------------------------------------------------------------------------
 dias=int(input("Por favor ingrese los dias:"))
 caso=int(caso)
 contador_casos=0
+#la varianter con respecto a la version anterior es que en vez de multiplicar por un promedio
+#se multiplica por el numero mas chico mayor que 1.0
 for e in range(0,dias):
-    contador_casos=contador_casos+(caso*promedio)
+    contador_casos=contador_casos+(caso*acumulador)
 
 print("La cantidad de casos confirmados en", dias,"dias probablemente sera:",int(contador_casos),"casos")
+print(acumulador)
 input() 
