@@ -4,11 +4,23 @@ import datetime
 from tkinter import *
 def funcion():
     print ("Excelente")
-def resultado():
+def resultado(contador_casos,dias):
     abrir_ventana=Toplevel(root)
-    abrir_ventana.geometry("205x100")
+    abrir_ventana.geometry("140x70")
     root.iconify()
+    titulo=Label(abrir_ventana,text="Aproximadamente habra")
+    titulo.grid(row=1,column=1)
+    etiqueta_resultado=Label(abrir_ventana,text=contador_casos,justify=CENTER)
+    etiqueta_resultado.grid(row=2,column=1)
+    dias=str(dias)
+    texto="Casos en "+dias+" dias"
+    abajo=Label(abrir_ventana,text=texto,)
+    abajo.grid(row=3,column=1)
+    etiqueta_resultado.mainloop()
 def calculo():
+    #primeramente guardamos en dias la variable obtenida
+    dias=var_entrada.get()
+    print(dias)
     archivo=open("CalculoCoronavirus.csv")
     reader = csv.reader(archivo,delimiter=';')
     i=0
@@ -35,6 +47,16 @@ def calculo():
         if(aux<=minimo and aux>1.0):
             acumulador=aux
             minimo=aux
+    caso=int(caso)
+    contador_casos=0
+    #la varianter con respecto a la version anterior es que en vez de multiplicar por un promedio
+    #se multiplica por el numero mas chico mayor que 1.0
+    for e in range(0,dias):
+        contador_casos=contador_casos+(caso*acumulador)
+    contador_casos=int(contador_casos)
+    resultado(contador_casos,dias)
+    
+        
 root=Tk()
 root.geometry("205x100")
 titulo1=Label(root,text="Bienvenidos a la calculadora de casos")
@@ -42,12 +64,11 @@ titulo1.grid(row=1,column=1)
 titulo2=Label(root,text="Ingrese los dias por favor")
 titulo2.grid(row=2,column=1)
 #creacion basica de etiquetas
-boton=Button(root,text="imprimir excelente",command=lambda: print(texto.get()),width=15,height=1,anchor="center")
-boton.grid(row=4,column=1)
-boton2=Button(root,text="Prueba",command=resultado)
-boton2.grid(row=5,column=1)
-# boton.place(x=50,y=70)
-#creacion basica de botones
-texto=Entry(root,justify=CENTER)
+#creacion de la variable para guardar las cosas
+var_entrada=IntVar()
+texto=Entry(root,justify=CENTER,textvariable=var_entrada)
 texto.grid(row=3,column=1)
+boton=Button(root,text="Go",command=calculo,width=15,height=1,anchor="center")
+boton.grid(row=4,column=1)
+#creacion basica de botones
 root.mainloop()
